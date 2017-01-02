@@ -1,4 +1,4 @@
 # ajsfw
-Atom JavaScript Frontend
+Atom JavaScript Frontend Framework
 
 This repository is under construction
