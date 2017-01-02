@@ -1,6 +1,7 @@
 # ajs framework
 
 Another (Atom) JavaScript Frontend Framework
+pronounce /aɪs/
 
 www.ajsfw.org
 
