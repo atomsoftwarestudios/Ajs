@@ -3,6 +3,8 @@
 
 # Ajs  & AjsTest related
 AjsTest/src/ajs/
+AjsTest/js/ajs*
+AjsTest/js/ajstest*
 
 # User-specific files
 *.suo
