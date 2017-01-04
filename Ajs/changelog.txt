@@ -29,17 +29,9 @@ Features:
 	- Navigation
 	- Application management
 	- View, View Components and Visual Components (templating)
-	- Language & translation
-
-	- Data
-		- JSON API
-		- Data caching
-
-	- WebSockets
 
 TODO:
     - Documentation
-		- Copyrights & thanks to lib developers
 		- Intentions and reasons why AJS was developed
 		- How it works
 		- Visual Studio project and compilation
