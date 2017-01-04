@@ -1,0 +1,4 @@
+D:\Documents\Visual Studio 2015\Projects\Ajs\Ajs\bin\Ajs.dll
+D:\Documents\Visual Studio 2015\Projects\Ajs\Ajs\bin\Ajs.pdb
+D:\Documents\Visual Studio 2015\Projects\Ajs\Ajs\obj\Debug\Ajs.dll
+D:\Documents\Visual Studio 2015\Projects\Ajs\Ajs\obj\Debug\Ajs.pdb

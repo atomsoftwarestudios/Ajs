@@ -1,4 +1,4 @@
-# ajs framework
+﻿# ajs framework
 www.ajsfw.org
 
 Another (Atom) JavaScript Frontend Framework<br />

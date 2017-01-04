@@ -1,0 +1,4 @@
+D:\Documents\Visual Studio 2015\Projects\Ajs\Ajs\js\ajs.js
+D:\Documents\Visual Studio 2015\Projects\Ajs\Ajs\js\ajs.d.ts
+D:\Documents\Visual Studio 2015\Projects\Ajs\Ajs\js\ajs.js
+D:\Documents\Visual Studio 2015\Projects\Ajs\Ajs\js\ajs.d.ts
