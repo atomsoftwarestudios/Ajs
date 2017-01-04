@@ -4,7 +4,7 @@
 # Ajs  & AjsTest related
 Ajs/bin*
 Ajs/obj*
-Ajs/js/*
+Ajs/js/ajs*
 AjsTest/bin*
 AjsTest/obj*
 AjsTest/src/ajs*
