@@ -1,1 +1,2 @@
-﻿
+This has to be here as the folder must be synchronized.
+But the rest of the folder should remain clean.
