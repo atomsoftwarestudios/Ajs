@@ -1,4 +1,4 @@
-﻿/* *************************************************************************
+/* *************************************************************************
 The MIT License (MIT)
 Copyright (c)2016-2017 Atom Software Studios. All rights reserved.
 
@@ -18,7 +18,7 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE.
 **************************************************************************** */
 
-namespace ajs.mvvm {
+namespace ajs.mvvm.view {
 
     "use strict";
 
@@ -61,16 +61,16 @@ namespace ajs.mvvm {
         public set rootViewComponentName(value: string) { this._rootUpdated(value); }
 
         /** Root view component currently in use */
-        protected _rootViewComponent: viewmodel.ViewComponent;
+        protected _rootViewComponent: ajs.mvvm.viewmodel.ViewComponent;
         /** Returns root view component currently in use */
-        public get rootViewComponent(): viewmodel.ViewComponent { return this._rootViewComponent; }
+        public get rootViewComponent(): ajs.mvvm.viewmodel.ViewComponent { return this._rootViewComponent; }
 
         /** Specifies the root component for the current state change. 
          *  This component is then rendered (including its children) if neccessary
          */
-        protected _changeRootComponent: viewmodel.ViewComponent;
+        protected _changeRootComponent: ajs.mvvm.viewmodel.ViewComponent;
         /** Returns the current change root component. Valid when the stage change is in progress only */
-        public get changeRootComponent(): viewmodel.ViewComponent { return this._changeRootComponent; }
+        public get changeRootComponent(): ajs.mvvm.viewmodel.ViewComponent { return this._changeRootComponent; }
 
         /** Used for shadow rendering of the view component after the state change and it for comparing changes against the target DOM */
         protected _shadowDom: Document;
@@ -82,17 +82,17 @@ namespace ajs.mvvm {
          */
         public get getComponentId(): number { this._lastComponentId++; return this._lastComponentId; }
 
-        /** Holds style sheets (template names) applied to the current view */
+        /** Holds style sheets (template names / StyleSheet URIs) applied to the current view */
         protected _appliedStyleSheets: string[];
         /** Returns style sheets (template names) applied to the current view */
         public get appliedStyleSheets(): string[] { return this._appliedStyleSheets; }
 
 
-        protected _navigationNotifier: viewmodel.ComponentEventNotifier;
-        public get navigationNotifier(): viewmodel.ComponentEventNotifier { return this._navigationNotifier; }
+        protected _navigationNotifier: ajs.events.Notifier;
+        public get navigationNotifier(): ajs.events.Notifier { return this._navigationNotifier; }
 
-        protected _renderDoneNotifier: viewmodel.ComponentEventNotifier;
-        public get renderDoneNotifier(): viewmodel.ComponentEventNotifier { return this._renderDoneNotifier; }
+        protected _renderDoneNotifier: ajs.events.Notifier;
+        public get renderDoneNotifier(): ajs.events.Notifier { return this._renderDoneNotifier; }
 
         /**
          * Constructs a view. This constructor is called from the ajs.Framework during initialization
@@ -103,8 +103,8 @@ namespace ajs.mvvm {
          */
         public constructor(templateManager: TemplateManager, viewComponentManager: ViewComponentManager) {
 
-            this._navigationNotifier = new viewmodel.ComponentEventNotifier();
-            this._renderDoneNotifier = new viewmodel.ComponentEventNotifier();
+            this._navigationNotifier = new ajs.events.Notifier();
+            this._renderDoneNotifier = new ajs.events.Notifier();
 
             this._templateManager = templateManager;
             this._viewComponentManager = viewComponentManager;
@@ -134,9 +134,9 @@ namespace ajs.mvvm {
             this.render(this._rootViewComponent);
         }
 
-        protected _createViewComponent(name: string): viewmodel.ViewComponent {
+        protected _createViewComponent(name: string): ajs.mvvm.viewmodel.ViewComponent {
 
-            let viewComponentConstructor: typeof viewmodel.ViewComponent;
+            let viewComponentConstructor: typeof ajs.mvvm.viewmodel.ViewComponent;
             viewComponentConstructor = this._viewComponentManager.getComponentConstructorByName(name);
 
             if (viewComponentConstructor === null) {
@@ -150,7 +150,7 @@ namespace ajs.mvvm {
                 throw new VisualComponentNotRegisteredException(name);
             }
 
-            this.applyStylesheetFromTemplate(visualComponent.template);
+            this.applyStyleSheetsFromTemplate(visualComponent.template);
 
             return new viewComponentConstructor(this, null, visualComponent);
 
@@ -161,23 +161,36 @@ namespace ajs.mvvm {
             let styleSheets: NodeListOf<HTMLStyleElement> = document.head.getElementsByTagName("style");
             for (let i: number = 0; i < styleSheets.length; i++) {
                 if (styleSheets.item(i).hasAttribute("id") &&
-                    this._appliedStyleSheets.indexOf(styleSheets.item(i).getAttribute("id")) !== -1)
-                document.head.removeChild(styleSheets.item(i));
+                    this._appliedStyleSheets.indexOf(styleSheets.item(i).getAttribute("id")) !== -1) {
+                    document.head.removeChild(styleSheets.item(i));
+                }
             }
             this._appliedStyleSheets = [];
         }
 
-        public applyStylesheetFromTemplate(template: ajs.templating.Template): void {
+        public applyStyleSheetsFromTemplate(template: ajs.templating.Template): void {
+            // styleSheets defined in the stylesheets attribute of the template
+            let styleSheets: string[] = this.templateManager.getTemplateStyleSheetsData(template);
+            for (let i: number = 0; i < template.styleSheets.length; i++) {
+                this.appliedStyleSheets.push(template.styleSheets[i]);
+                let style: HTMLElement = document.createElement("style");
+                style.setAttribute("type", "text/css");
+                style.textContent = this._processStyleSheet(styleSheets[i]);
+                document.head.appendChild(style);
+            }
+
+            // styleSheets defied as tags in the template
             if (this._appliedStyleSheets.indexOf(template.name) === -1) {
                 let styleSheets: NodeListOf<HTMLStyleElement> = template.template.getElementsByTagName("style");
                 for (let i: number = 0; i < styleSheets.length; i++) {
                     let styleSheet: HTMLStyleElement = styleSheets.item(i);
                     if (styleSheet.hasAttribute("type") && styleSheet.getAttribute("type") === "text/css") {
                         this._appliedStyleSheets.push(template.name);
-                        let clonedStyleSheet: HTMLStyleElement = (styleSheet.cloneNode(true)) as HTMLStyleElement;
-                        let adoptedStyleSheet: HTMLStyleElement = document.adoptNode(clonedStyleSheet) as HTMLStyleElement;
-                        adoptedStyleSheet.setAttribute("id", template.name);
-                        document.head.appendChild(adoptedStyleSheet);
+                        let styleSheetData: string = styleSheet.innerText;
+                        let style: HTMLElement = document.createElement("style");
+                        style.setAttribute("type", "text/css");
+                        style.textContent = this._processStyleSheet(styleSheetData);
+                        document.head.appendChild(style);
                     }
                 }
 
@@ -188,13 +201,13 @@ namespace ajs.mvvm {
             this._navigationNotifier.notify(null);
         }
 
-        public _stateChangeBegin(viewComponent: viewmodel.ViewComponent): void {
+        public _stateChangeBegin(viewComponent: ajs.mvvm.viewmodel.ViewComponent): void {
             if (this._changeRootComponent === null) {
                 this._changeRootComponent = viewComponent;
             }
         }
 
-        public _stateChangeEnd(viewComponent: viewmodel.ViewComponent): void {
+        public _stateChangeEnd(viewComponent: ajs.mvvm.viewmodel.ViewComponent): void {
             if (this._changeRootComponent === viewComponent) {
                 // render only if the root view component was rendered already
                 // initial rendering of the root component is ensured from the _rootUpdated method
@@ -206,28 +219,35 @@ namespace ajs.mvvm {
             }
         }
 
-        public notifyParentsChildrenStateChange(viewComponent: viewmodel.ViewComponent): void {
+        public notifyParentsChildrenStateChange(viewComponent: ajs.mvvm.viewmodel.ViewComponent): void {
             if (viewComponent !== null && this._changeRootComponent !== null) {
-                while (viewComponent !== this._changeRootComponent.parentComponent && viewComponent !== null) {
-                    viewComponent.setStateChanged();
-                    viewComponent = viewComponent.parentComponent;
+                while (viewComponent !== this._changeRootComponent.ajsParentComponent && viewComponent !== null) {
+                    viewComponent.ajsSetStateChanged();
+                    viewComponent = viewComponent.ajsParentComponent;
                 }
             }
         }
 
-        public render(viewComponent: viewmodel.ViewComponent): void {
+        public render(viewComponent: ajs.mvvm.viewmodel.ViewComponent): void {
 
-            if (viewComponent.element !== null) {
+            if (viewComponent.ajsElement !== null) {
+
                 // update the render of the component
                 this._shadowDom.body.innerHTML = "";
                 let componentElement: HTMLElement = viewComponent.render(this._shadowDom.body, true, false);
                 // if the component was rendered to shadow DOM, update the main DOM
                 if (componentElement !== null) {
-                    this._updateDom(componentElement, viewComponent.element);
+
+                    this._updateDom(componentElement, viewComponent.ajsElement);
+
+                    if (viewComponent.ajsVisualStateTransition) {
+                        viewComponent.ajsVisualStateTransitionBegin(viewComponent.ajsElement);
+                    }
+
                 // otherwise remove the component root element from the DOM
                 } else {
-                    viewComponent.element.parentElement.removeChild(viewComponent.element);
-                    viewComponent.element = null;
+                    viewComponent.ajsElement.parentElement.removeChild(viewComponent.ajsElement);
+                    viewComponent.ajsElement = null;
                 }
             } else {
                 // initial render of the view component (and all of its children)
@@ -240,15 +260,17 @@ namespace ajs.mvvm {
         }
 
         protected _isComponent(node: Node): boolean {
-            if (node !== undefined && node !== null) {
-                return node instanceof HTMLElement && node.hasAttribute("ajscname");
+            if (node !== undefined && node !== null && node instanceof Element) {
+                let componentElement: ajs.mvvm.viewmodel.IComponentElement = (node as ajs.mvvm.viewmodel.IComponentElement);
+                return componentElement.hasOwnProperty("ajsComponent") &&
+                    componentElement.ajsComponent instanceof ajs.mvvm.viewmodel.ViewComponent;
             }
             return false;
         }
 
         protected _getComponentId(node: Node): number {
             if (this._isComponent(node)) {
-                return Number((node as HTMLElement).getAttribute("ajscid"));
+                return Number((node as ajs.mvvm.viewmodel.IComponentElement).ajsComponent.ajsComponentId);
             }
             return -1;
         }
@@ -282,12 +304,22 @@ namespace ajs.mvvm {
                     if (!componentFound) {
                         let clonedNode: Node = source.cloneNode(false);
                         let adoptedNode: Node = target.ownerDocument.adoptNode(clonedNode);
+                        this._copyComponentElementProperties(source, adoptedNode);
                         target.parentNode.insertBefore(adoptedNode, target);
-                        // if the node is component, update the component element
+                        // if the node is component update the component element
                         if (this._isComponent(source)) {
                             let id: number = this._getComponentId(source);
-                            let component: viewmodel.ViewComponent = this._viewComponentManager.getComponentInstance(id);
-                            component.element = adoptedNode as HTMLElement;
+                            let component: ajs.mvvm.viewmodel.ViewComponent = this._viewComponentManager.getComponentInstance(id);
+                            component.ajsElement = adoptedNode as HTMLElement;
+
+                        }
+                        // if any register defined event listeners
+                        if ((source as ajs.mvvm.viewmodel.IComponentElement).ajsEventListeners instanceof Array) {
+                            for (let i: number = 0; i < (source as ajs.mvvm.viewmodel.IComponentElement).ajsEventListeners.length; i++) {
+                                adoptedNode.addEventListener(
+                                    (source as ajs.mvvm.viewmodel.IComponentElement).ajsEventListeners[i].eventType,
+                                    (source as ajs.mvvm.viewmodel.IComponentElement).ajsEventListeners[i].listener);
+                            }
                         }
                         this._updateDom(source, adoptedNode);
                     }
@@ -308,12 +340,21 @@ namespace ajs.mvvm {
                                 // add node and continue with its tree
                                 let clonedNode: Node = source.childNodes.item(i).cloneNode(false);
                                 let adoptedNode: Node = target.ownerDocument.adoptNode(clonedNode);
+                                this._copyComponentElementProperties(source, adoptedNode);
                                 target.appendChild(adoptedNode);
-                                // if the node is component, update the component element
+                                // if the node is component, update the component element and register defined event listeners
                                 if (this._isComponent(source.childNodes.item(i))) {
                                     let id: number = this._getComponentId(source.childNodes.item(i));
-                                    let component: viewmodel.ViewComponent = ajs.Framework.viewComponentManager.getComponentInstance(id);
-                                    component.element = adoptedNode as HTMLElement;
+                                    let component: ajs.mvvm.viewmodel.ViewComponent = ajs.Framework.viewComponentManager.getComponentInstance(id);
+                                    component.ajsElement = adoptedNode as HTMLElement;
+                                }
+                                // if any register defined event listeners
+                                if ((source.childNodes.item(i) as ajs.mvvm.viewmodel.IComponentElement).ajsEventListeners instanceof Array) {
+                                    for (let i: number = 0; i < (source.childNodes.item(i) as ajs.mvvm.viewmodel.IComponentElement).ajsEventListeners.length; i++) {
+                                        adoptedNode.addEventListener(
+                                            (source.childNodes.item(i) as ajs.mvvm.viewmodel.IComponentElement).ajsEventListeners[i].eventType,
+                                            (source.childNodes.item(i) as ajs.mvvm.viewmodel.IComponentElement).ajsEventListeners[i].listener);
+                                    }
                                 }
 
                                 this._updateDom(source.childNodes.item(i), adoptedNode);
@@ -337,13 +378,26 @@ namespace ajs.mvvm {
 
         }
 
+        protected _copyComponentElementProperties(source: Node, target: Node): void {
+            if (source instanceof Element && target instanceof Element) {
+                (target as ajs.mvvm.viewmodel.IComponentElement).ajsComponent =
+                    (source as ajs.mvvm.viewmodel.IComponentElement).ajsComponent;
+
+                (target as ajs.mvvm.viewmodel.IComponentElement).ajsOwnerComponent =
+                    (source as ajs.mvvm.viewmodel.IComponentElement).ajsOwnerComponent;
+
+                (target as ajs.mvvm.viewmodel.IComponentElement).ajsEventListeners =
+                    (source as ajs.mvvm.viewmodel.IComponentElement).ajsEventListeners;
+            }
+        }
+
         protected _updateNode(source: Node, target: Node): boolean {
 
             if (source.nodeType === Node.ELEMENT_NODE) {
 
                 // check if the node is view component, is the same as the target and should be skipped
-                if (this._isComponent(source) && (source as HTMLElement).hasAttribute("ajsSkip")
-                    && this._isComponent(target) && this._getComponentId(source) === this._getComponentId(target)) {
+                if (this._isComponent(source) && (source as viewmodel.IComponentElement).ajsSkipUpdate === true &&
+                    this._isComponent(target) && this._getComponentId(source) === this._getComponentId(target)) {
                     return false;
                 }
 
@@ -380,6 +434,26 @@ namespace ajs.mvvm {
             }
 
             return true;
+        }
+
+        protected _processStyleSheet(styleSheet: string): string {
+
+            styleSheet = styleSheet.replace(/resource\(.*\)/gm, (str: string): string => {
+                let tmp: RegExpExecArray = (/'(.*)'/g).exec(str);
+                if (tmp.length > 1) {
+                    let resource: ajs.resources.IResource = this._templateManager.resourceManager.getResource(tmp[1], resources.STORAGE_TYPE.LOCAL);
+                    if (resource !== null) {
+                        return "url(data:image;base64," + resource.data + ")";
+                    } else {
+                        throw new CSSRequiredResourceNotLoadedException();
+                    }
+
+                } else {
+                    throw new CSSInvalidResourceSpecificationException();
+                }
+            });
+
+            return styleSheet;
         }
 
     }

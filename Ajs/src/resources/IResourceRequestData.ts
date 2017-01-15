@@ -1,4 +1,4 @@
-﻿/* *************************************************************************
+/* *************************************************************************
 The MIT License (MIT)
 Copyright (c)2016-2017 Atom Software Studios. All rights reserved.
 
@@ -24,6 +24,7 @@ namespace ajs.resources {
 
     export interface IResourceRequestData {
         url: string;
+        isBinary: boolean;
         userData: any;
         lastModified: Date;
         startTime: Date;

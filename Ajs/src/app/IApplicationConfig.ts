@@ -32,7 +32,7 @@ namespace ajs.app {
         appConstructor: typeof ajs.app.Application;
 
         /** User configuration of the application */
-        userConfig?: any;
+        userConfig?: IApplicationUserConfig;
 
     }
 

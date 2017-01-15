@@ -1,4 +1,4 @@
-﻿/* *************************************************************************
+/* *************************************************************************
 The MIT License (MIT)
 Copyright (c)2016-2017 Atom Software Studios. All rights reserved.
 
@@ -47,6 +47,9 @@ namespace ajs.resources {
         protected _maxSize: number;
         /** Returns the maximum size of the storage in bytes */
         public get maxSize(): number { return this._maxSize; }
+
+        /** Returns type of the storage */
+        public get type(): STORAGE_TYPE { return STORAGE_TYPE.MEMORY; }
 
         /**
          * Construct the StorageMemory object

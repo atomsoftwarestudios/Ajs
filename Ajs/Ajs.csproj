@@ -23,7 +23,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="js\" />
-    <Folder Include="src\mvvm\model\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="src\!ajs.ts" />
@@ -34,6 +33,7 @@
     <TypeScriptCompile Include="src\app\Application.ts" />
     <TypeScriptCompile Include="src\app\Exceptions.ts" />
     <TypeScriptCompile Include="src\app\IApplicationConfig.ts" />
+    <TypeScriptCompile Include="src\app\IApplicationUserConfig.ts" />
     <TypeScriptCompile Include="src\boot\!boot.ts" />
     <TypeScriptCompile Include="src\boot\boot.ts" />
     <TypeScriptCompile Include="src\boot\Exceptions.ts" />
@@ -41,20 +41,30 @@
     <TypeScriptCompile Include="src\boot\IGetAjsConfig.ts" />
     <TypeScriptCompile Include="src\boot\IGetResourceList.ts" />
     <TypeScriptCompile Include="src\boot\IResourceLists.ts" />
+    <TypeScriptCompile Include="src\boot\IResourceLoadingInfo.ts" />
+    <TypeScriptCompile Include="src\events\IListener.ts" />
+    <TypeScriptCompile Include="src\events\Notifier.ts" />
     <TypeScriptCompile Include="src\mvvm\!mvvm.ts" />
-    <TypeScriptCompile Include="src\mvvm\Exceptions.ts" />
-    <TypeScriptCompile Include="src\mvvm\View.ts" />
+    <TypeScriptCompile Include="src\mvvm\model\!model.ts" />
+    <TypeScriptCompile Include="src\mvvm\model\Exceptions.ts" />
+    <TypeScriptCompile Include="src\mvvm\model\IInstancedModelsCollection.ts" />
+    <TypeScriptCompile Include="src\mvvm\model\Model.ts" />
+    <TypeScriptCompile Include="src\mvvm\model\ModelManager.ts" />
     <TypeScriptCompile Include="src\mvvm\viewmodel\!viewmodel.ts" />
-    <TypeScriptCompile Include="src\mvvm\viewmodel\ComponentEventNotifier.ts" />
+    <TypeScriptCompile Include="src\mvvm\viewmodel\Exceptions.ts" />
     <TypeScriptCompile Include="src\mvvm\viewmodel\IAttributeProcessor.ts" />
     <TypeScriptCompile Include="src\mvvm\viewmodel\IAttributeProcessorCollection.ts" />
-    <TypeScriptCompile Include="src\mvvm\viewmodel\IComponentEventNotifierCollection.ts" />
-    <TypeScriptCompile Include="src\mvvm\viewmodel\IComponentEventNotifyListener.ts" />
-    <TypeScriptCompile Include="src\mvvm\viewmodel\IInstancedViewComponents.ts" />
-    <TypeScriptCompile Include="src\mvvm\viewmodel\IRegisteredViewComponents.ts" />
+    <TypeScriptCompile Include="src\mvvm\viewmodel\IFilteredState.ts" />
+    <TypeScriptCompile Include="src\mvvm\viewmodel\IInstancedViewComponentsCollection.ts" />
+    <TypeScriptCompile Include="src\mvvm\viewmodel\IRegisteredViewComponentsCollection.ts" />
     <TypeScriptCompile Include="src\mvvm\viewmodel\IViewState.ts" />
+    <TypeScriptCompile Include="src\mvvm\viewmodel\IViewStateGet.ts" />
+    <TypeScriptCompile Include="src\mvvm\viewmodel\IViewStateSet.ts" />
     <TypeScriptCompile Include="src\mvvm\viewmodel\ViewComponent.ts" />
     <TypeScriptCompile Include="src\mvvm\viewmodel\ViewComponentManager.ts" />
+    <TypeScriptCompile Include="src\mvvm\view\Exceptions.ts" />
+    <TypeScriptCompile Include="src\mvvm\view\View.ts" />
+    <TypeScriptCompile Include="src\navigation\IRedirection.ts" />
     <TypeScriptCompile Include="src\navigation\Navigator.ts" />
     <TypeScriptCompile Include="src\resources\AjsStorage.ts" />
     <TypeScriptCompile Include="src\resources\Exceptions.ts" />
@@ -81,6 +91,8 @@
     <TypeScriptCompile Include="src\routing\IRoutes.ts" />
     <TypeScriptCompile Include="src\routing\Router.ts" />
     <TypeScriptCompile Include="src\routing\RouterExceptions.ts" />
+    <TypeScriptCompile Include="src\state\!state.ts" />
+    <TypeScriptCompile Include="src\state\StateManager.ts" />
     <TypeScriptCompile Include="src\templating\!templating.ts" />
     <TypeScriptCompile Include="src\templating\Exceptions.ts" />
     <TypeScriptCompile Include="src\templating\ITemplatesCollection.ts" />
@@ -101,8 +113,6 @@
     <TypeScriptCompile Include="src\utils\Utils.ts" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="src\ajs.csproj" />
-    <Content Include="src\ajs.csproj.user" />
     <Content Include="changelog.txt" />
     <Content Include="license.txt" />
   </ItemGroup>

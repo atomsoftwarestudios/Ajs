@@ -17,6 +17,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE.
 **************************************************************************** */
+
 namespace ajs {
 
     "use strict";
@@ -34,7 +35,13 @@ namespace ajs {
 
 
         /** Configuration of resource pools */
-        resourceManagerConfig?: ajs.resources.IResourceManagerConfig;
+        resourceManager?: ajs.resources.IResourceManagerConfig;
+
+        /** Navigator configuration - redirections */
+        navigator?: ajs.navigation.IRedirection[];
+
+        /** Router configuration - routed */
+        router?: ajs.routing.IRoutes[];
     }
 
 }

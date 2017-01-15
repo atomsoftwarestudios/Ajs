@@ -1,4 +1,4 @@
-﻿/* *************************************************************************
+/* *************************************************************************
 The MIT License (MIT)
 Copyright (c)2016-2017 Atom Software Studios. All rights reserved.
 
@@ -18,21 +18,11 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 IN THE SOFTWARE.
 **************************************************************************** */
 
-namespace ajs.mvvm {
+namespace ajs.mvvm.viewmodel {
 
     "use strict";
 
-    export class ViewComponentIsNotRegisteredException extends Error {
-        constructor(componentName: string) {
-            super();
-            this.message = componentName;
-        }
-    }
+    export class NotImplementedException extends Error { }
 
-    export class VisualComponentNotRegisteredException extends Error {
-        constructor(componentName: string) {
-            super();
-            this.message = componentName;
-        }
-    }
+
 }

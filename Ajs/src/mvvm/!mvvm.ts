@@ -1,4 +1,4 @@
-﻿/* *************************************************************************
+/* *************************************************************************
 The MIT License (MIT)
 Copyright (c)2016-2017 Atom Software Studios. All rights reserved.
 
@@ -22,7 +22,7 @@ IN THE SOFTWARE.
  * Model View View Component Model namespace
  * asd
  */
-namespace ajs.mvvm {
+namespace ajs.mvvm.model {
 
     "use strict";
 

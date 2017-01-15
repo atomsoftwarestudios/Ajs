@@ -1,4 +1,4 @@
-﻿/* *************************************************************************
+/* *************************************************************************
 The MIT License (MIT)
 Copyright (c)2016-2017 Atom Software Studios. All rights reserved.
 
@@ -37,6 +37,10 @@ namespace ajs.resources {
      */
     export class StorageSession extends StorageBrowser {
 
+
+        /** Returns type of the storage */
+        public get type(): STORAGE_TYPE { return STORAGE_TYPE.SESSION; }
+
         /**
          * Construct the StorageSession object
          */
@@ -46,7 +50,7 @@ namespace ajs.resources {
             if (this._supported) {
                 this._storageProvider = window.sessionStorage;
                 this._usedSpace = 0;
-                this._resources = this._getResourcesInfoFromLocalStorage();
+                this._resources = this._getResourcesInfo();
             }
         }
 

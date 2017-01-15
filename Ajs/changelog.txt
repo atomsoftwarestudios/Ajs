@@ -62,24 +62,36 @@ TODO:
 	- Error handling, exceptions & exception rethrowing
 		- Especially in templating and view component processings
 
+	- Loading message / page while the ajs is initializing
+	    - should be later usable through user project so should be implemented as a component
+
 	- Resource management
-	    - remove resources older than
+	    - remove resources older than, partially done, need to be tested
 		- performance optiomizations
 		   - creating the string of specified length in the StorageBrowser.cleanCache can be optimized for ES6
 		   - multiple calls of getResource during single operation can be optimized
 		   - review cycles
-
+		- Implement state management
+			- Implement application state resource storage
+			- Implement session state resource storage
 
 	- View, View Components, Visual Components
+	    - Don't render the component tag to the output
+		   - will be hard to achieve as root node is needed at this time
+		- Move IFs from Template to the View Component
+		   - This is idea now, not designed, how it should work
+	    - Support for render target.
+		   - Currently, only the main window document is supported so it will be hard to integrate to playgrounds
+		- View modifications queuing to prevent async operation fighting
 		- CSS style management
 		   - LESS & reuired toolchain
 		- ViewComponent._getState -> implement function to collect the state information from the view component tree
 		- Dynamic View Component -> implement a component allowing to set the view component programatically, not just from template
 		- Static content view component
-		- Event subscriptions
-		- View Component Finalization
-		- Refactor ViewComponent properties to ajs... property name
+		- Event subscriptions (component to component, DOM is implemented already)
 		- Refactor ViewComponent state management to look nicer
+		- Refactor ViewComponent rendering functions to look nicer
+
 
 	- Data
 		- JSON API
@@ -91,6 +103,12 @@ TODO:
 
 	- Language & Translation
 
+	----
+
+	Tools:
+		Implement typescript preprocessor
+		- Just // #ifdef and // #ifndef
+		- Integrate to msbuild process
 
 	FAR FUTURE:
 	- Caching of processed objects - especially visualComponents and view components??

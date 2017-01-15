@@ -1,4 +1,4 @@
-﻿/* *************************************************************************
+/* *************************************************************************
 The MIT License (MIT)
 Copyright (c)2016-2017 Atom Software Studios. All rights reserved.
 
@@ -24,10 +24,11 @@ namespace ajs.resources {
 
     export class ResourceLoader {
 
-        public loadResource(loadEndHandler: IResourceLoadEndHandler, url: string, userData?: any, lastModified?: Date): void {
+        public loadResource(loadEndHandler: IResourceLoadEndHandler, url: string, isBinary: boolean, userData?: any, lastModified?: Date): void {
             lastModified = lastModified || ajs.utils.minDate();
             let requestData: IResourceRequestData = {
                 url: url,
+                isBinary: isBinary,
                 userData: userData,
                 lastModified: lastModified,
                 startTime: new Date(),
@@ -40,8 +41,12 @@ namespace ajs.resources {
 
             let xhr: IResourceRequest = new XMLHttpRequest() as IResourceRequest;
 
-            xhr.open("GET", requestData.url);
+            xhr.open("GET", encodeURI(requestData.url));
             xhr.resourceRequestData = requestData;
+
+            if (requestData.isBinary) {
+                xhr.responseType = "arraybuffer";
+            }
 
             // ie9 does not support loadend event
             xhr.addEventListener("readystatechange", (event: Event) => {
@@ -62,7 +67,7 @@ namespace ajs.resources {
             if (xhr.readyState === 4) {
                 let responseData: IResourceResponseData = {
                     type: xhr.responseType,
-                    data: xhr.responseText,
+                    data: requestData.isBinary ? xhr.response : xhr.responseText,
                     userData: requestData.userData,
                     httpStatus: xhr.status,
                     startTime: requestData.startTime,

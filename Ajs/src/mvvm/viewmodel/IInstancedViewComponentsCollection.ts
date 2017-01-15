@@ -22,8 +22,8 @@ namespace ajs.mvvm.viewmodel {
 
     "use strict";
 
-    export interface IComponentEventNotifyListener {
-        (sender: ViewComponent): boolean;
+    export interface IInstancedViewComponentsCollection {
+        [index: number]: ViewComponent;
     }
 
 }

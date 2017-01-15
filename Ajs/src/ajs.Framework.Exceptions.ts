@@ -1,4 +1,4 @@
-﻿/* *************************************************************************
+/* *************************************************************************
 The MIT License (MIT)
 Copyright (c)2016-2017 Atom Software Studios. All rights reserved.
 
@@ -23,9 +23,9 @@ namespace ajs {
     "use strict";
 
     /** Thrown when the start is called before the application is configured */
-    export class ApplicationNotConfiguredException { }
+    export class ApplicationNotConfiguredException extends Error { }
 
     /** Thrown the passed application constructor is not a function */
-    export class AppConstructorMustBeAFunctionException { }
+    export class AppConstructorMustBeAFunctionException extends Error { }
 
 }

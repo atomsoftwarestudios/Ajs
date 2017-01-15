@@ -1,4 +1,4 @@
-﻿/* *************************************************************************
+/* *************************************************************************
 The MIT License (MIT)
 Copyright (c)2016-2017 Atom Software Studios. All rights reserved.
 
@@ -21,6 +21,10 @@ IN THE SOFTWARE.
 namespace ajs.templating {
 
     "use strict";
+
+    export class FailedToLoadTemplatesException extends Error { }
+
+    export class FailedToLoadTemplateStyleSheetsException extends Error { }
 
     export class PlaceholdersCantHaveChildrenNodesException extends Error { }
 
