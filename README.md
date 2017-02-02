@@ -2,7 +2,7 @@ Ajs Fw is currently maintained together with AjsDoc at https://github.com/atomso
 
 # Ajs framework
 
-http://ajsfw.azurewebsites.com
+http://ajsfw.azurewebsites.net
 
 Another (Atom) JavaScript Frontend Framework<br />
 pronounce /aɪs/
