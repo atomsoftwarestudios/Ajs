@@ -1,3 +1,5 @@
+Ajs Fw is currently maintained together with AjsDoc at https://github.com/atomsoftwarestudios/AjsDoc
+
 # Ajs framework
 
 www.ajsfw.org
